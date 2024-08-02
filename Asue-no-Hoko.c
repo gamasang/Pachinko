@@ -5,11 +5,17 @@
 #include <unistd.h>
 #include <sys/select.h>
 #include <errno.h>
+//#include <windows.h>
 
 #define TamaYen 4 //円パチ
 #define HesoKakuritsu 68 //(17/250)==0.068
 #define AtariKakuritsu 3199 //*(1/10) %
 #define RushKakuritsu 810 //*(1/10) %
+
+void beep(){
+        system("osascript -e 'beep'");   //mac
+    //Beep(750, 300); //Windows 750Hz の音を 300ms 鳴らす
+}
 
 // 端末設定を非カノニカルモードに変更
 void set_conio_mode(int fd, struct termios *old_termios) {
@@ -177,18 +183,18 @@ void screen(int p[3], int *mode, int *rush, int *con, int *kaiten, int *soukaite
    //p[0]=2;p[1]=2;p[2]=2;*atsu=1;
     if (p[0] == p[2]) {
         if (*atsu == 1) {
-        system("osascript -e 'beep'");   
+            beep();
         gawa(*mode, 0, *rush, *kaiten, *soukaiten, *zantama, *atari, *souatari,soukin,*rantama);
             printf("\x1b[31m 押 せ !\x1b[0m\n");
             printf("\x1b[36m[%d][?][%d]\x1b[0m\n\n", p[0], p[2]);
         gawa(*mode, 1, *rush, *kaiten, *soukaiten, *zantama, *atari, *souatari,soukin,*rantama);
-        system("osascript -e 'beep'");   
+        beep();
         gawa(*mode, 0, *rush, *kaiten, *soukaiten, *zantama, *atari, *souatari,soukin,*rantama);
             printf(" 押 せ !\n");
             printf("[%d][?][%d]\n\n", p[0], p[2]);
         gawa(*mode, 1, *rush, *kaiten, *soukaiten, *zantama, *atari, *souatari,soukin,*rantama);
 
-        system("osascript -e 'beep'");   
+            beep();
             //////////////////////
             struct termios old_termios;
             int ch;
@@ -249,7 +255,7 @@ void screen(int p[3], int *mode, int *rush, int *con, int *kaiten, int *soukaite
             // 端末設定を元に戻す
             reset_conio_mode(STDIN_FILENO, &old_termios);
             //////////////////////
-            system("osascript -e 'beep'");
+            beep();
             *atsu = 0;
         } else {
             for(int m=0;m<2;m++){
@@ -262,7 +268,7 @@ void screen(int p[3], int *mode, int *rush, int *con, int *kaiten, int *soukaite
             printf("\n\x1b[36m[%d][?][%d]\x1b[0m\n", p[0], p[2]);
             printf("\x1b[35m リーチ！\x1b[0m\n");
             gawa(*mode, 1, *rush, *kaiten, *soukaiten, *zantama, *atari, *souatari,soukin,*rantama);  
-                system("osascript -e 'beep'"); 
+            beep();
             }       
             gawa(*mode, 0, *rush, *kaiten, *soukaiten, *zantama, *atari, *souatari,soukin,*rantama);
             printf("\n[%d][?][%d]\n", p[0], p[2]);
@@ -276,16 +282,16 @@ void screen(int p[3], int *mode, int *rush, int *con, int *kaiten, int *soukaite
     gawa(*mode, 1, *rush, *kaiten, *soukaiten, *zantama, *atari, *souatari,soukin,*rantama);  
     usleep(500000);      
     if (p[0] == p[1] && p[1] == p[2]) {
-            system("osascript -e 'beep'");
+            beep();
     gawa(*mode, 0, *rush, *kaiten, *soukaiten, *zantama, *atari, *souatari,soukin,*rantama);
     printf("\n\x1b[33m[%d][%d][%d]\x1b[0m\n\n", p[0], p[1], p[2]);
     gawa(*mode, 1, *rush, *kaiten, *soukaiten, *zantama, *atari, *souatari,soukin,*rantama);  
-            system("osascript -e 'beep'");
+            beep();
     usleep(500000);      
         if (*mode == 0) {
             anten();
         for (int i = 1; i <= 3; i++) {
-            system("osascript -e 'beep'");
+            beep();
         }
         for (int i = 1; i <= 50; i++) {
         usleep(50000);    
@@ -305,7 +311,7 @@ void screen(int p[3], int *mode, int *rush, int *con, int *kaiten, int *soukaite
         if(*mode==1){   
             anten();
         for (int i = 1; i <= 5; i++) {
-            system("osascript -e 'beep'");
+            beep();
         }
         for (int i = 1; i <= 80; i++) {
         usleep(50000);    
@@ -319,7 +325,7 @@ void screen(int p[3], int *mode, int *rush, int *con, int *kaiten, int *soukaite
         }
         anten();
         for (int i = 1; i <= 3; i++) {
-            system("osascript -e 'beep'");
+            beep();
         }
         for (int i = 1; i <= 50; i++) {
         usleep(50000);    
@@ -360,16 +366,16 @@ int main() {
             gawa(mode, 1, rush, kaiten, soukaiten, zantama, atari, souatari,soukin,rantama);
             heso = rand() % 1000;
             if (heso < HesoKakuritsu) {
-                system("osascript -e 'beep'");
+            beep();
                 hit = rand() % AtariKakuritsu;
                 if (hit < 500) {
                     if (rand() % 10 == 0) {
-                    system("osascript -e 'beep'");
+            beep();
                     }
                 }
                 if (hit < 100) {
                     if (rand() % 5 == 0) {
-                    system("osascript -e 'beep'");
+            beep();
                     }
                     if (rand() % 5 == 0) {
                     atsu = 1;
@@ -377,7 +383,7 @@ int main() {
                 }
                 if (hit < 50) {
                     if (rand() % 4 == 0) {
-                    system("osascript -e 'beep'");
+            beep();
                     }
                     if (rand() % 4 == 0) {
                     atsu = 1;
@@ -385,7 +391,7 @@ int main() {
                 }
                 if (hit < 20) {
                     if (rand() % 2 == 0) {
-                    system("osascript -e 'beep'");
+            beep();
                     }
                     if (rand() % 2 == 0) {
                     atsu = 1;
@@ -410,16 +416,16 @@ int main() {
                 gawa(mode, 0, rush, kaiten, soukaiten, zantama, atari, souatari,soukin,rantama);
                 printf("\n[?][?][?]\n\n");
                 gawa(mode, 1, rush, kaiten, soukaiten, zantama, atari, souatari,soukin,rantama);
-                system("osascript -e 'beep'");
+            beep();
                 if (rush - 3 == hir) {
                     for (int i = 0; i < 3; i++) {
-                    system("osascript -e 'beep'");
+            beep();
                     }
                 }
                 if (rush<rush/4*4) {
                     if(rand()%rush<rush/4*3){
                     if (rand() % 10 == 0) {
-                    system("osascript -e 'beep'");
+            beep();
                     }
                     if (rand() % 10 == 0) {
                     atsu = 1;
@@ -429,7 +435,7 @@ int main() {
                 if (rush<rush/4*3) {
                     if(rand()%rush<rush/4*2){
                     if (rand() % 10 == 0) {
-                    system("osascript -e 'beep'");
+            beep();
                     }
                     if (rand() % 10 == 0) {
                     atsu = 1;
@@ -439,7 +445,7 @@ int main() {
                 if (rush<rush/4*2) {
                     if(rand()%rush<rush/4*1){
                     if (rand() % 10 == 0) {
-                    system("osascript -e 'beep'");
+            beep();
                     }
                     if (rand() % 10 == 0) {
                     atsu = 1;
@@ -449,7 +455,7 @@ int main() {
                 if (rush<rush/4*1) {
                     if(rand()%rush<1){
                     if (rand() % 10 == 0) {
-                    system("osascript -e 'beep'");
+            beep();
                     }
                     if (rand() % 10 == 0) {
                     atsu = 1;
