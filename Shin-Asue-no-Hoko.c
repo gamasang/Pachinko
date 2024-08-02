@@ -355,7 +355,7 @@ void screen(int p[3], int *mode, int *rush, int *con, int *kaiten, int *soukaite
 int main() {
     srand((unsigned int)time(NULL));
     
-    printf("\033[1;1H\033[0J何千円投入しますか？\n");
+    printf("\033[2J何千円投入しますか？\n");
     scanf("%d",&nyukin);
     zantama = (nyukin*1000)/TamaYen; // 初期残玉数
     soukin = soukin+nyukin;
